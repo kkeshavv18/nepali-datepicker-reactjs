@@ -115,7 +115,7 @@ function App() {
 
 - **Input/Output Format**: `YYYY-MM-DD` (Bikram Sambat)
 - **Example**: `"2081-02-15"` represents 15th Jestha, 2081 BS
-- **Supported Range**: 2000 BS to 2085 BS
+- **Supported Range**: 2001 BS to 2099 BS
 
 ## Features
 
