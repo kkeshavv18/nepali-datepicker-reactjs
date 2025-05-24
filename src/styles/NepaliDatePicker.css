@@ -1,0 +1,107 @@
+.nepali-datepicker-container {
+  position: relative;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+}
+
+.date-input {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.datepicker-modal {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background-color: #fff;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --modal-width: 200px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(var(--modal-width) * 0.02);
+  margin-bottom: 0.5rem;
+  padding: 0.3rem;
+}
+
+.modern-dropdown {
+  appearance: none;
+  width: 100%;
+  padding: 0.2rem;
+  border-radius: 0.375rem;
+  background-color: #f9fafa;
+  color: #374151;
+  font-size: calc(var(--modal-width) * 0.06);
+  cursor: pointer;
+  outline: none;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: calc(var(--modal-width) * 0.02);
+  margin-bottom: 0.25rem;
+  text-align: center;
+  font-size: calc(var(--modal-width) * 0.05);
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: calc(var(--modal-width) * 0.02);
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--modal-width) * 0.02);
+  height: calc(var(--modal-width) * 0.125);
+  font-size: calc(var(--modal-width) * 0.06);
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.day:hover {
+  border: 1px solid #c9cbd2 !important;
+}
+
+.day.initial {
+  box-sizing: border-box;
+}
+
+.day.empty {
+  cursor: default;
+  background: none;
+}
+.day.empty:hover {
+  border: none !important;
+}
+
+.arrow-button {
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f9fafa;
+  color: #374151;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
+}
