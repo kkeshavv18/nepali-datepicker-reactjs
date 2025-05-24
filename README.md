@@ -34,7 +34,7 @@ function App() {
 | Prop           | Type                     | Description                                                                        |
 | -------------- | ------------------------ | ---------------------------------------------------------------------------------- |
 | `initialDate`  | `string \| null`         | Initial date in YYYY-MM-DD format (Bikram Sambat). Example: `"2081-03-15"`         |
-| `onDateChange` | `(date: string) => void` | Callback function called when date is selected. Receives date in YYYY-MM-DD format |
+| `onDateChange` | `(date: string) => string` | Callback function called when date is selected. Receives date in YYYY-MM-DD format |
 
 ### Optional Props
 
