@@ -4,7 +4,7 @@ import type { Story } from "@ladle/react";
 
 export const NepaliDatePickerStory: Story = () => (
   <NepaliDatePicker
-    initialDate="2023-10-01"
+    initialDate="2082-02-10"
     onDateChange={(date) => {
       console.log("Date changed:", date);
     }}
@@ -13,7 +13,7 @@ export const NepaliDatePickerStory: Story = () => (
 
 export const NepaliDatePickerWithGreenBackground: Story = () => (
   <NepaliDatePicker
-    initialDate={"2023-10-01"}
+    initialDate={"2082-02-10"}
     onDateChange={(date) => {
       console.log("Date changed:", date);
     }}
