@@ -8,6 +8,7 @@ export const NepaliDatePickerStory: Story = () => (
     onDateChange={(date) => {
       console.log("Date changed:", date);
     }}
+    width="250px"
   />
 );
 
@@ -52,6 +53,7 @@ export const NepaliDatePickerWithEnglishLanguage: Story = () => (
     selectedDayBgColor="green"
     selectedDayColor="white"
     dayLanguage="eng"
+    helperText="Select a date"
   />
 );
 
