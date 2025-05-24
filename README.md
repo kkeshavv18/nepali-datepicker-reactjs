@@ -9,7 +9,14 @@ npm install @kkeshavv18/nepali-datepicker-reactjs
 ```
 
 ## Demo
-![image](https://github.com/user-attachments/assets/595f5385-6edc-47f9-9626-3271dd2e3870)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/595f5385-6edc-47f9-9626-3271dd2e3870" width="30%" />
+  <img src="https://github.com/user-attachments/assets/1708f377-91d8-4a09-9eba-e7918514b69a" width="35%" />
+  <img src="https://github.com/user-attachments/assets/1666ae17-3fde-434d-afc9-01a8be2a2957" width= 30%" />
+
+</p>
+
 
 
 ## Basic Usage
