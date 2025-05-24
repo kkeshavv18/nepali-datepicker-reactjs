@@ -5,7 +5,7 @@ A React component for selecting dates in the Nepali (Bikram Sambat) calendar sys
 ## Installation
 
 ```bash
-npm install @kkeshavv18/nepali-datepicker-reactjs
+npm install @reactjs/nepali-datepicker
 ```
 
 ## Demo
@@ -17,14 +17,12 @@ npm install @kkeshavv18/nepali-datepicker-reactjs
 
 </p>
 
-
-
 ## Basic Usage
 
 ```jsx
 import React, { useState } from "react";
-import { NepaliDatePicker } from "@kkeshavv18/nepali-datepicker-reactjs";
-import "@kkeshavv18/nepali-datepicker-reactjs/dist/index.css";
+import { NepaliDatePicker } from "@reactjs/nepali-datepicker";
+import "@reactjs/nepali-datepicker/dist/index.css";
 
 function App() {
   const [selectedDate, setSelectedDate] = useState("2081-01-15");
@@ -42,9 +40,9 @@ function App() {
 
 ### Required Props
 
-| Prop           | Type                     | Description                                                                        |
-| -------------- | ------------------------ | ---------------------------------------------------------------------------------- |
-| `initialDate`  | `string \| null`         | Initial date in YYYY-MM-DD format (Bikram Sambat). Example: `"2081-03-15"`         |
+| Prop           | Type                       | Description                                                                        |
+| -------------- | -------------------------- | ---------------------------------------------------------------------------------- |
+| `initialDate`  | `string \| null`           | Initial date in YYYY-MM-DD format (Bikram Sambat). Example: `"2081-03-15"`         |
 | `onDateChange` | `(date: string) => string` | Callback function called when date is selected. Receives date in YYYY-MM-DD format |
 
 ### Optional Props

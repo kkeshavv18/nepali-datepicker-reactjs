@@ -1,5 +1,5 @@
 {
-  "name": "@kkesahvv18/nepali-datepicker-reactjs",
+  "name": "@reactjs/nepali-datepicker",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
