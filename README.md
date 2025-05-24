@@ -8,6 +8,10 @@ A React component for selecting dates in the Nepali (Bikram Sambat) calendar sys
 npm install @kkeshavv18/nepali-datepicker-reactjs
 ```
 
+## Demo
+![image](https://github.com/user-attachments/assets/595f5385-6edc-47f9-9626-3271dd2e3870)
+
+
 ## Basic Usage
 
 ```jsx
