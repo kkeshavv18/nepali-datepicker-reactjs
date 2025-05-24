@@ -1,6 +1,6 @@
 # Nepali DatePicker Component
 
-A React component for selecting dates in the Nepali (Bikram Sambat) calendar system, supporting years 2000-2085 BS.
+A React component for selecting dates in the Nepali (Bikram Sambat) calendar system, supporting years 2001-2099 BS.
 
 ## Installation
 
