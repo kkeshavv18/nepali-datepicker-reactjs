@@ -114,7 +114,7 @@ function App() {
 ## Date Format
 
 - **Input/Output Format**: `YYYY-MM-DD` (Bikram Sambat)
-- **Example**: `"2081-03-15"` represents 15th Jestha, 2081 BS
+- **Example**: `"2081-02-15"` represents 15th Jestha, 2081 BS
 - **Supported Range**: 2000 BS to 2085 BS
 
 ## Features
