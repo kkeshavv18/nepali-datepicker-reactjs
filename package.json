@@ -15,6 +15,18 @@
     "url": "https://github.com/kkeshavv18/nepali-datepicker-reactjs.git"
   },
   "description": "",
+  "keywords": [
+    "nepali datepicker",
+    "react nepali datepicker",
+    "nepali calendar",
+    "bs datepicker",
+    "bikram sambat datepicker",
+    "react datepicker",
+    "nextjs datepicker",
+    "nepali date input",
+    "nepali date component",
+    "nepali date react"
+  ],
   "devDependencies": {
     "@ladle/react": "^5.0.3",
     "@types/react": "^19.1.5",

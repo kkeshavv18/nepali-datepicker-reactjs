@@ -133,6 +133,7 @@ function App() {
 - **Responsive Design**: Arrow button sizes automatically adjust based on the component width
 - **Initial Date Highlighting**: The initially provided date is highlighted with a border
 - **Click Outside to Close**: Calendar closes when clicking outside the component
+- **Manual Date Input**: Users can manually input the date in `YYYY-MM-DD` format, in addition to selecting a date from the date picker modal
 
 ## Notes
 
