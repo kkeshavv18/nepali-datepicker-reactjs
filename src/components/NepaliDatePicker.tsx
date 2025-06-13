@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../styles/NepaliDatePicker.css"; // Import your CSS styles
+import "../styles/NepaliDatePicker.css";
 import type { DateObject, NepaliDatePickerProps } from "../types/types";
 import { getInitialDate } from "../utils/getInitialDate";
 import { getDayOfWeekForBsDate } from "../utils/getDayOfWeekForBsDate";
@@ -29,10 +29,19 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
   borderRadius = " 0.375rem",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
-  const [currentDate, setCurrentDate] = useState<DateObject>(
-    getInitialDate(initialDate)
+  const [selectedDate, setSelectedDate] = useState<DateObject | null>(
+    initialDate ? getInitialDate(initialDate) : null
   );
+
+  const [currentDate, setCurrentDate] = useState<DateObject>(
+    initialDate
+      ? getInitialDate(initialDate)
+      : { year: MIN_YEAR, month: 0, day: 1 }
+  );
+  const [inputValue, setInputValue] = useState<string>(
+    initialDate ? normalizeDateFormat(initialDate) : ""
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const datepickerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialDateObject = initialDate ? getInitialDate(initialDate) : null;
@@ -90,11 +99,14 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
   };
 
   const selectDate = (year: number, month: number, day: number) => {
-    setSelectedDate({ year, month, day });
-    setCurrentDate({ year, month, day: 1 });
-    if (closeOnSelect) {
-      setIsOpen(false);
-    }
+    const newDate = { year, month, day };
+    setSelectedDate(newDate);
+    setCurrentDate(newDate);
+    const formattedDate = normalizeDateFormat(`${year}-${month + 1}-${day}`);
+    setInputValue(formattedDate); // Sync inputValue with selected date
+    setErrorMessage("");
+    onDateChange?.(formattedDate);
+    closeOnSelect && setIsOpen(false);
   };
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -104,6 +116,22 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
       inputRef.current !== event.target
     ) {
       setIsOpen(false);
+      // If inputValue is non-empty, validate it and update selectedDate/currentDate
+      if (inputValue) {
+        const validDate = validateDate(inputValue);
+        if (validDate) {
+          setSelectedDate(validDate);
+          setCurrentDate(validDate);
+          setErrorMessage("");
+          onDateChange?.(
+            normalizeDateFormat(
+              `${validDate.year}-${validDate.month + 1}-${validDate.day}`
+            )
+          );
+        } else {
+          setErrorMessage("Invalid date.");
+        }
+      }
     }
   };
 
@@ -113,35 +141,114 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
     } else {
       document.removeEventListener("mousedown", handleOutsideClick);
     }
+    // Added inputValue, selectedDate to dependencies to ensure handleOutsideClick
+    // uses the latest values when it's re-bound.
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isOpen]);
+  }, [isOpen, inputValue, selectedDate]);
 
   useEffect(() => {
     if (initialDate) {
-      const [year, month, day] = initialDate.split("-").map(Number);
-      setSelectedDate({ year, month: month - 1, day });
-      setCurrentDate(getInitialDate(initialDate));
-    } else {
-      throw new Error("Initial date is not provided");
+      const dateObject = getInitialDate(initialDate);
+      setSelectedDate(dateObject);
+      setCurrentDate(dateObject); // Also set currentDate from initialDate
+      setInputValue(normalizeDateFormat(initialDate));
     }
   }, [initialDate]);
 
-  useEffect(() => {
-    if (selectedDate && onDateChange) {
-      onDateChange(
+  const validateDate = (value: string): DateObject | null => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (dateRegex.test(value)) {
+      const [year, month, day] = value.split("-").map(Number);
+      if (
+        year >= MIN_YEAR &&
+        year <= MAX_YEAR &&
+        month >= 1 &&
+        month <= 12 &&
+        day >= 1 &&
+        day <= getDaysInMonthNepali(year, month - 1)
+      ) {
+        return { year, month: month - 1, day };
+      }
+    }
+    return null;
+  };
+
+  const handleInputClick = () => {
+    // When the input is clicked and the modal is currently closed (about to open)
+    if (!isOpen) {
+      if (selectedDate) {
+        // If a date is already selected, make sure currentDate matches it
+        setCurrentDate(selectedDate);
+      } else if (inputValue) {
+        // If no date is selected but there's a valid input value, parse it
+        const validDate = validateDate(inputValue);
+        if (validDate) {
+          setCurrentDate(validDate);
+        } else {
+          // If input is invalid, default to MIN_YEAR
+          setCurrentDate({ year: MIN_YEAR, month: 0, day: 1 });
+        }
+      } else {
+        // If no selectedDate and no valid inputValue, default to MIN_YEAR
+        setCurrentDate({ year: MIN_YEAR, month: 0, day: 1 });
+      }
+    }
+    // Toggle the modal's open state
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setErrorMessage("");
+    if (!value) {
+      setIsOpen(false);
+      return;
+    }
+    const validDate = validateDate(value);
+    if (validDate) {
+      setSelectedDate(validDate);
+      setCurrentDate(validDate); // Update currentDate when input becomes valid
+      setIsOpen(false);
+      onDateChange?.(
+        normalizeDateFormat(
+          `${validDate.year}-${validDate.month + 1}-${validDate.day}`
+        )
+      );
+    }
+    // If input is invalid, we don't change selectedDate/currentDate here,
+    // the errorMessage will guide the user.
+  };
+
+  const handleInputBlur = () => {
+    if (inputValue) {
+      const validDate = validateDate(inputValue);
+      if (validDate) {
+        setSelectedDate(validDate);
+        setCurrentDate(validDate); // Update currentDate on blur if valid
+        setErrorMessage("");
+        if (onDateChange) {
+          onDateChange(
+            normalizeDateFormat(
+              `${validDate.year}-${validDate.month + 1}-${validDate.day}`
+            )
+          );
+        }
+      } else {
+        setErrorMessage("Invalid date.");
+      }
+    } else if (selectedDate) {
+      // If input is cleared on blur, but a date was previously selected, restore input value
+      setInputValue(
         normalizeDateFormat(
           `${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`
         )
       );
+      setErrorMessage("");
     }
-    if (selectedDate && inputRef.current) {
-      inputRef.current.value = normalizeDateFormat(
-        `${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`
-      );
-    }
-  }, [selectedDate]);
+  };
 
   // Component responsible for rendering the days of the month
   const renderDays = () => {
@@ -184,7 +291,7 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
           initialDateObject?.day === day;
         days.push(
           <div
-            key={`prev-${day}`}
+            key={`prev-${prevYear}-${prevMonth}-${day}`}
             style={{
               backgroundColor: isSelected ? selectedDayBgColor : "transparent",
               color: isSelected ? selectedDayColor : "gray",
@@ -201,7 +308,7 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
       }
     }
 
-    // Fill days of current month
+    // Render days for the current month
     for (let day = 1; day <= daysInMonth; day++) {
       const isSelected =
         selectedDate?.year === currentDate.year &&
@@ -213,7 +320,7 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
         initialDateObject?.day === day;
       days.push(
         <div
-          key={day}
+          key={`current-${currentDate.year}-${currentDate.month}-${day}`} 
           style={{
             backgroundColor: isSelected ? selectedDayBgColor : "transparent",
             color: isSelected ? selectedDayColor : "#374151",
@@ -242,7 +349,7 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
           initialDateObject?.day === day;
         days.push(
           <div
-            key={`next-${day}`}
+            key={`next-${nextYear}-${nextMonth}-${day}`}
             style={{
               backgroundColor: isSelected ? selectedDayBgColor : "transparent",
               color: isSelected ? selectedDayColor : "gray",
@@ -289,25 +396,31 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
         ref={inputRef}
         type="text"
         className="date-input"
-        value={
-          selectedDate
-            ? normalizeDateFormat(
-                `${selectedDate.year}-${selectedDate.month + 1}-${
-                  selectedDate.day
-                }`
-              )
-            : "Select a date"
-        }
-        onClick={() => setIsOpen(!isOpen)}
-        readOnly
+        value={inputValue}
+        onClick={handleInputClick}
+        onChange={handleInputChange}
+        onBlur={handleInputBlur}
+        placeholder="YYYY-MM-DD"
         style={{
           borderRadius: borderRadius,
           backgroundColor: bgColor,
           color: textColor,
           width: width,
           height: height,
+          border: errorMessage ? "1px solid red" : "",
         }}
       />
+      {errorMessage && (
+        <div
+          style={{
+            color: "red",
+            fontSize: helperTextFontSize,
+            marginTop: "4px",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
       {isOpen && (
         <div className="datepicker-modal" style={{ width: width }}>
           <div className="controls">
