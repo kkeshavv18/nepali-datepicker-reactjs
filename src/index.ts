@@ -1,1 +1,1 @@
-export * from "./components/NepaliDatePicker";
+export { NepaliDatePicker } from "./components/NepaliDatePicker";
