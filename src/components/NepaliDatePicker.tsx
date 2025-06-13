@@ -11,6 +11,7 @@ import {
   NEPALI_MONTHS,
   NEPALI_WEEKDAYS,
 } from "../constants/monthsAndDays";
+import { validateDate } from "../utils/validateDate";
 
 export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
   initialDate,
@@ -157,24 +158,6 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
     }
   }, [initialDate]);
 
-  const validateDate = (value: string): DateObject | null => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (dateRegex.test(value)) {
-      const [year, month, day] = value.split("-").map(Number);
-      if (
-        year >= MIN_YEAR &&
-        year <= MAX_YEAR &&
-        month >= 1 &&
-        month <= 12 &&
-        day >= 1 &&
-        day <= getDaysInMonthNepali(year, month - 1)
-      ) {
-        return { year, month: month - 1, day };
-      }
-    }
-    return null;
-  };
-
   const handleInputClick = () => {
     // When the input is clicked and the modal is currently closed (about to open)
     if (!isOpen) {
@@ -320,7 +303,7 @@ export const NepaliDatePicker: React.FC<NepaliDatePickerProps> = ({
         initialDateObject?.day === day;
       days.push(
         <div
-          key={`current-${currentDate.year}-${currentDate.month}-${day}`} 
+          key={`current-${currentDate.year}-${currentDate.month}-${day}`}
           style={{
             backgroundColor: isSelected ? selectedDayBgColor : "transparent",
             color: isSelected ? selectedDayColor : "#374151",
